@@ -61,7 +61,7 @@ m2 = 0.75  # 二级模数
 
 min_zs = 18  # 太阳齿数下限
 max_zs = 27  # 太阳齿数上限
-min_zp = 10  # 行星齿数下限
+min_zp2 = 15  # 二级行星齿数下限
 max_rs_dp1 = 60  # 一级行星半径上限
 
 
@@ -76,12 +76,32 @@ results = []  # 初始化结果表格
 
 for zs in range(min_zs, max_zs + 1):
     max_zp1 = int((max_rs_dp1 - m1 * zs / 2) / m1)
-    for zp1 in range(min_zp, min(int(zs * 6.464), max_zp1) + 1):
-        for zp2 in range(min_zp, zp1):
+    for zp1 in range(min_zp2, min(int(zs * 6.464), max_zp1) + 1):
+        for zp2 in range(min_zp2, zp1):
             for zr in range(
                 int((zs * m1 + zp1 * m1 + zp2 * m2) / m2),
                 int((zs * m1 + zp1 * m1 + zp2 * m2) / m2) + 4,
             ):
+                # 判断是否均布
+                if (zs % n_p != 0) or (zr % n_p != 0):
+                    if zs % n_p != 0:
+                        E_A = zs / n_p
+                        for i in range(1, 100):
+                            if (zs + zr) / n_p + (1 - zp2 / zp1) * (
+                                E_A + i - zs / n_p
+                            ) != i and (zs + zr) / n_p + (1 - zp2 / zp1) * (
+                                E_A - i - zs / n_p
+                            ) != i:
+                                continue
+                    else:
+                        E_A = math.ceil(zs / n_p)
+                        for i in range(0, 100):
+                            if (zs + zr) / n_p + (1 - zp2 / zp1) * (
+                                E_A + i - zs / n_p
+                            ) != i and (zs + zr) / n_p + (1 - zp2 / zp1) * (
+                                E_A - i - zs / n_p
+                            ) != i:
+                                continue
                 if zr > max_zr:
                     continue
                 i_s_H = (zs * zp2 + (zp1 * zr)) / (zs * zp2)
