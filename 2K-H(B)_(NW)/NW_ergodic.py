@@ -9,11 +9,11 @@ import math
 
 "基本参数与遍历范围设置"
 n_p = 3  # 行星轮数量
-m1 = 0.5  # 一级模数
-m2 = 0.6  # 二级模数
+m1 = 0.55  # 一级模数
+m2 = 0.75  # 二级模数
 
-min_zs = 12  # 太阳齿数下限
-max_zs = 36  # 太阳齿数上限
+min_zs = 18  # 太阳齿数下限
+max_zs = 18  # 太阳齿数上限
 min_zp2 = 15  # 二级行星齿数下限
 max_rs_dp1 = 60  # 一级行星基准分度圆半径上限
 
@@ -55,17 +55,20 @@ for zs in range(min_zs, max_zs + 1):
                     continue
                 results.append(
                     [
-                        zs,
-                        zp1,
-                        zp2,
-                        zr,
-                        i_s_H,
-                        eta,
-                        ns_H,
-                        np_H,
-                        ts / n_p,
-                        tp,
-                        tp * t_input_peaks_ratio,
+                        round(x, 3)
+                        for x in [
+                            zs,
+                            zp1,
+                            zp2,
+                            zr,
+                            i_s_H,
+                            eta,
+                            ns_H,
+                            np_H,
+                            ts / n_p,
+                            tp,
+                            tp * t_input_peaks_ratio,
+                        ]
                     ]
                 )
 
