@@ -1,9 +1,9 @@
-# 该脚本用于遍历计算2Z-X(B)型(NM)行星减速在不同齿数下的效率
+# 该脚本用于遍历计算2K-H(B)型(NM)行星减速在不同齿数下的效率
 import math
 
 """
 参考文献
-行星齿轮传动设计 第二版 绕振纲P150表6-1、p151公式6-38
+行星齿轮传动设计 第二版 绕振纲P150表6-1、p151公式6-37
 """
 
 
@@ -19,7 +19,6 @@ def NW_E_OPT(
     二级行星: p2
     齿圈: r
     -----------
-    模数: m
     齿数: z
     :param epsilon1: s与p1的重合度
     :param epsilon2: p2与r的重合度
@@ -32,17 +31,27 @@ def NW_E_OPT(
     :return: NW型行星减速器的效率
     """
     # 一级啮合损失系数
-    phi_m_x_1 = (
-        2 * math.pi * f_m * (1 / zs + 1 / zp1) * (1 - epsilon1 + 0.5 * epsilon1**2)
+    psai_m_x_1 = (
+        # 2 * math.pi * f_m * (1 / zs + 1 / zp1) * (1 - epsilon1 + 0.5 * epsilon1**2)
+        math.pi
+        / 2
+        * epsilon1
+        * f_m
+        * (1 / zs + 1 / zp1)
     )
     # 二级啮合损失系数
-    phi_m_x_2 = (
-        2 * math.pi * f_m * (1 / zp2 - 1 / zr) * (1 - epsilon2 + 0.5 * epsilon2**2)
+    psai_m_x_2 = (
+        # 2 * math.pi * f_m * (1 / zp2 - 1 / zr) * (1 - epsilon2 + 0.5 * epsilon2**2)
+        math.pi
+        / 2
+        * epsilon2
+        * f_m
+        * (1 / zp2 - 1 / zr)
     )
     # 总啮合损失系数
-    phi_m_x = (phi_m_x_1 + phi_m_x_2) * N_p
+    psai_m_x = (psai_m_x_1 + psai_m_x_2) * N_p
     # 效率
-    eta = 1 - (zr * zp1 / (zs * zp2 + zr * zp1)) * phi_m_x
+    eta = 1 - (zr * zp1 / (zs * zp2 + zr * zp1)) * psai_m_x
     return eta
 
 
