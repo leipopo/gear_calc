@@ -1,3 +1,4 @@
 *.csv
 gearcalc/
 **/__pycache__
+finger_2s-s/
