@@ -48,8 +48,16 @@ for zs in range(min_zs, max_zs + 1):
                 if (i_s_H > max_i) or (i_s_H < min_i):
                     continue
                 eta = NW_E_OPT(N_p=n_p, zs=zs, zp1=zp1, zp2=zp2, zr=zr)
-                [ns_H, np_H, nr_H, ts, tp, tr] = NW_H_av_t(
-                    [m1, m2, zs, zp1, zp2, zr, n_p, n_input, t_input]
+                ns_H, np_H, ts, tp = NW_H_av_t(
+                    m_1=m1,
+                    m_2=m2,
+                    z_s=zs,
+                    z_p1=zp1,
+                    z_p2=zp2,
+                    z_r=zr,
+                    N_p=n_p,
+                    t=t_input,
+                    n=n_input,
                 )
                 if eta < min_eta:
                     continue

@@ -205,3 +205,4 @@ def visualize_closed_loop_tolerance(parts, img_width=16, img_height=10, m=20):
     plt.axis("off")
     plt.title("Closed Loop Tolerance Visualization")
     plt.show()
+    plt.waitforbuttonpress()

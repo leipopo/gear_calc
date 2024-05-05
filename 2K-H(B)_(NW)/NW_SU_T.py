@@ -37,3 +37,5 @@ part_lower_planetary = TS.Part("lower_planetary", 10, 0.0, -0.05, False)
 part_bearing = TS.Part("bearing", 4, -0.03, -0.10, False)
 parts = [part_housing, part_upper_planetary, part_lower_planetary, part_bearing]
 TS.visualize_closed_loop_tolerance(parts)
+
+##

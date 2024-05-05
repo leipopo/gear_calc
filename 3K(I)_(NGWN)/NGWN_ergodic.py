@@ -64,8 +64,17 @@ for zs in range(min_zs, max_zs + 1):
                 eta_forward, eta_backward = NGWN_E_OPT(
                     zs=zs, zp1=zp1, zp2=zp2, zr1=zr1, zr2=zr2
                 )
-                [ns_H, np_H, nr1_H, nr2_H, ts, tp, tr1, tr2] = NGWN_H_av_t(
-                    [m1, m2, zs, zp1, zp2, zr1, zr2, n_p, n_input, t_input]
+                ns_H, np_H, ts, tp = NGWN_H_av_t(
+                    m_1=m1,
+                    m_2=m2,
+                    z_s=zs,
+                    z_p1=zp1,
+                    z_p2=zp2,
+                    z_r1=zr1,
+                    z_r2=zr2,
+                    N_p=n_p,
+                    t=t_input,
+                    n=n_input,
                 )
                 i = (1 + zr1 / zs) / (1 - (zp2 * zr1) / (zp1 * zr2))
                 # print(zs, zp1, zp2, zr1, zr2)
@@ -76,12 +85,12 @@ for zs in range(min_zs, max_zs + 1):
                     # print(zs, zp1, zp2, zr1, zr2)
                     if eta_forward > min_eta:  # 限定效率
                         formatted_result = [
-                            round(x, 3)
+                            round(x, 4)
                             for x in [
                                 zs,
                                 zp1,
-                                zp2,
                                 zr1,
+                                zp2,
                                 zr2,
                                 i,
                                 eta_forward,
@@ -100,8 +109,8 @@ pt = PrettyTable()
 pt.field_names = [
     "齿数s",
     "齿数p1",
-    "齿数p2",
     "齿数r1",
+    "齿数p2",
     "齿数r2",
     "传动比",
     "正向效率",
@@ -125,8 +134,8 @@ pt_sorted = PrettyTable()
 pt_sorted.field_names = [
     "齿数s",
     "齿数p1",
-    "齿数p2",
     "齿数r1",
+    "齿数p2",
     "齿数r2",
     "传动比",
     "正向效率",
