@@ -39,13 +39,20 @@ def visualize_closed_loop_tolerance(parts, img_width=16, img_height=10, m=20):
     )
 
     increase_parts_total_length = sum(
-        part.size + part.upper_deviation * m for part in increase_parts
+        part.size + part.lower_deviation * m for part in increase_parts
     )
+    # print(increase_parts_total_length)
     decrease_parts_total_length = sum(
-        part.size + part.lower_deviation * m for part in decrease_parts
+        part.size + part.upper_deviation * m for part in decrease_parts
     )
+    # print(decrease_parts_total_length)
 
     base_length = max(increase_parts_total_length, decrease_parts_total_length)
+    closed_loop_line_place = (
+        "upper"
+        if increase_parts_total_length > decrease_parts_total_length
+        else "lower"
+    )
     closed_loop_color = "green" if total_lower_deviation >= 0 else "orange"
     # if increase_parts_total_length > decrease_parts_total_length:
     #     base_length = increase_parts_total_length
@@ -56,11 +63,11 @@ def visualize_closed_loop_tolerance(parts, img_width=16, img_height=10, m=20):
 
     drawing_width_percentage = 0.9  # 绘制宽度百分比
     increase_parts_length_percentage = list(
-        (part.size + part.upper_deviation * m) / base_length * drawing_width_percentage
+        (part.size + part.lower_deviation * m) / base_length * drawing_width_percentage
         for part in increase_parts
     )
     decrease_parts_length_percentage = list(
-        (part.size + part.lower_deviation * m) / base_length * drawing_width_percentage
+        (part.size + part.upper_deviation * m) / base_length * drawing_width_percentage
         for part in decrease_parts
     )
 
@@ -143,8 +150,22 @@ def visualize_closed_loop_tolerance(parts, img_width=16, img_height=10, m=20):
 
     # 绘制闭环公差
     plt.plot(
-        [current_percentage, start_x + drawing_width_percentage],
-        [0.5 + partline_y_offset, 0.5 + partline_y_offset],
+        (
+            [
+                start_x + sum(decrease_parts_length_percentage),
+                start_x + drawing_width_percentage,
+            ]
+            if closed_loop_line_place == "upper"
+            else [
+                start_x + sum(increase_parts_length_percentage),
+                start_x + drawing_width_percentage,
+            ]
+        ),
+        (
+            [0.5 + partline_y_offset, 0.5 + partline_y_offset]
+            if closed_loop_line_place == "upper"
+            else [0.5 - partline_y_offset, 0.5 - partline_y_offset]
+        ),
         color=closed_loop_color,
         linewidth=partline_width,
     )
@@ -152,7 +173,7 @@ def visualize_closed_loop_tolerance(parts, img_width=16, img_height=10, m=20):
     plt.text(
         current_percentage
         + (start_x + drawing_width_percentage - current_percentage) / 2,
-        0.5 + partline_y_offset + 0.05,
+        0.5,
         text,
         ha="center",
     )
@@ -160,7 +181,11 @@ def visualize_closed_loop_tolerance(parts, img_width=16, img_height=10, m=20):
     # 绘制终止分割线
     plt.plot(
         [start_x + drawing_width_percentage, start_x + drawing_width_percentage],
-        [0.5 + divline_y_offset, 0.5 + divline_y_offset + divline_height],
+        (
+            [0.5 + divline_y_offset, 0.5 + divline_y_offset + divline_height]
+            if closed_loop_line_place == "upper"
+            else [0.5 - divline_y_offset, 0.5 - divline_y_offset - divline_height]
+        ),
         color="black",
         linewidth=divline_width,
     )

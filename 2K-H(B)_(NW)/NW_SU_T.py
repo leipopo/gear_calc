@@ -32,7 +32,8 @@ TS.visualize_closed_loop_tolerance(parts)
 
 ## 外壳与行星架下部轴承配合位高度公差叠加
 part_housing = TS.Part("housing", 20.7, 0.02, 0.0, True)
-part_upper_planetary = TS.Part("upper_planetary", 6.7, 0.00, -0.05, False)
+part_upper_planetary = TS.Part("upper_planetary", 6.7, 0.0, -0.05, False)
 part_lower_planetary = TS.Part("lower_planetary", 10, 0.0, -0.05, False)
-parts = [part_housing, part_upper_planetary, part_lower_planetary]
+part_bearing = TS.Part("bearing", 4, -0.03, -0.10, False)
+parts = [part_housing, part_upper_planetary, part_lower_planetary, part_bearing]
 TS.visualize_closed_loop_tolerance(parts)
