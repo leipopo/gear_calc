@@ -39,20 +39,46 @@ def visualize_closed_loop_tolerance(parts, img_width=16, img_height=10, m=20):
     )
 
     increase_parts_total_length = sum(
-        part.size + part.lower_deviation * m for part in increase_parts
+        part.size + part.lower_deviation for part in increase_parts
     )
     # print(increase_parts_total_length)
     decrease_parts_total_length = sum(
-        part.size + part.upper_deviation * m for part in decrease_parts
+        part.size + part.upper_deviation for part in decrease_parts
     )
     # print(decrease_parts_total_length)
+    drawing_width_percentage = 0.9  # 绘制宽度百分比
+    if increase_parts_total_length >= decrease_parts_total_length:
+        base_length = sum(part.size + part.upper_deviation for part in increase_parts)
+        closed_loop_line_place = "upper"
 
-    base_length = max(increase_parts_total_length, decrease_parts_total_length)
-    closed_loop_line_place = (
-        "upper"
-        if increase_parts_total_length > decrease_parts_total_length
-        else "lower"
-    )
+        increase_parts_length_percentage = list(
+            (part.size + part.upper_deviation) / base_length * drawing_width_percentage
+            for part in increase_parts
+        )
+        decrease_parts_length_percentage = list(
+            (part.size + part.lower_deviation)
+            / base_length
+            * (base_length - total_upper_deviation * m)
+            / base_length
+            * drawing_width_percentage
+            for part in decrease_parts
+        )
+    else:
+        base_length = sum(part.size + part.lower_deviation for part in decrease_parts)
+        closed_loop_line_place = "lower"
+        increase_parts_length_percentage = list(
+            (part.size + part.upper_deviation)
+            / base_length
+            * (base_length - total_lower_deviation * m)
+            / base_length
+            * drawing_width_percentage
+            for part in increase_parts
+        )
+        decrease_parts_length_percentage = list(
+            (part.size + part.lower_deviation) / base_length * drawing_width_percentage
+            for part in decrease_parts
+        )
+
     closed_loop_color = "green" if total_lower_deviation >= 0 else "orange"
     # if increase_parts_total_length > decrease_parts_total_length:
     #     base_length = increase_parts_total_length
@@ -60,16 +86,6 @@ def visualize_closed_loop_tolerance(parts, img_width=16, img_height=10, m=20):
     # else:
     #     base_length = decrease_parts_total_length
     #     closed_loop_color = "orange"
-
-    drawing_width_percentage = 0.9  # 绘制宽度百分比
-    increase_parts_length_percentage = list(
-        (part.size + part.lower_deviation * m) / base_length * drawing_width_percentage
-        for part in increase_parts
-    )
-    decrease_parts_length_percentage = list(
-        (part.size + part.upper_deviation * m) / base_length * drawing_width_percentage
-        for part in decrease_parts
-    )
 
     plt.figure(figsize=(img_width, img_height))
     # 从左开始留白百分之五，开始用红色绘制增环零部件，然后用蓝色绘制减环零部件
