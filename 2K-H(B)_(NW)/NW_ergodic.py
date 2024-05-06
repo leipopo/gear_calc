@@ -9,20 +9,21 @@ import math
 
 "基本参数与遍历范围设置"
 n_p = 3  # 行星轮数量
-m1 = 0.5  # 一级模数
-m2 = 0.6  # 二级模数
+m1 = 0.55  # 一级模数
+m2 = 0.75  # 二级模数
 
-min_zs = 15  # 太阳齿数下限
-max_zs = 27  # 太阳齿数上限
+min_zs = 18  # 太阳齿数下限
+max_zs = 18  # 太阳齿数上限
 min_zp2 = 15  # 二级行星齿数下限
-max_rs_dp1 = 55  # 一级行星基准分度圆半径上限
+max_rs_dp1 = 62  # 一级行星基准齿廓齿顶包络圆半径上限
 
 
-min_i = 17.5  # 速比下限
+min_i = 10.5  # 速比下限
 max_i = 30  # 速比上限
 
-max_dr = 48  # 齿圈基准分度圆直径上限
-max_zr = int(max_dr / m2)  # 齿圈最大齿数
+h_r_D = 2  # 齿根到齿外圆的距离
+max_dr = 54  # 齿圈外径圆直径上限
+max_zr = int((max_dr - h_r_D * 2 - m2 * 1.25 * 2) / m2)  # 齿圈最大齿数
 min_eta = 0.85  # 最小效率（确保效率不会太低）
 
 n_input = 3000  # 输入额定转速
@@ -32,7 +33,7 @@ t_input_peaks_ratio = 5  # 输入转矩峰值与额定值的比值
 results = []  # 初始化结果表格
 
 for zs in range(min_zs, max_zs + 1):
-    max_zp1 = int((max_rs_dp1 - m1 * zs / 2) / m1)
+    max_zp1 = int((max_rs_dp1 - m1 * 1 * 2 - m1 * zs / 2) / m1)
     for zp1 in range(min_zp2, min(int(zs * 6.464), max_zp1) + 1):
         for zp2 in range(min_zp2, zp1):
             for zr in range(
