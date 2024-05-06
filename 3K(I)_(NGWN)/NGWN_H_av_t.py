@@ -49,20 +49,19 @@ def NGWN_H_av_t(
     )
     # 计算S切向力
     F_p1_s = t / N_p / r_s
-    # 计算P1切向力
+    # 计算S输入到P1的切向力
     F_s_p1 = -F_p1_s
     # print("F_s_p1",F_s_p1)
     # 计算R1切向力
     F_r1_p1 = (r_p1 + r_p2) / (r_p1 - r_p2) * F_s_p1
     F_p1_r1 = -F_r1_p1
+    # 计算P1输入到R1的转矩
+    t_p1_r1 = F_r1_p1 * r_p1
     # 计算P2切向力
     F_r2_p2 = F_r1_p1 + F_s_p1
     F_p2_r2 = -F_r2_p2
-    # F_r2_p2_2 = 2 * r_p1 / (r_p1 - r_p2) * F_s_p1
-    # print("F_r2_p2:", F_r2_p2)
-    # print("F_r2_p2_2:", F_r2_p2_2)
-    # 计算P1P2转矩
-    t_p1p2 = F_r2_p2 * r_p2
+    # 计算P2输入到R2的转矩
+    t_p2_r2 = F_r2_p2 * r_p2
     # t_p1p2_2 = F_s_p1 * r_p1 - F_r1_p1 * r_p1
     # print("t_p1p2:", t_p1p2)
     # print("t_p1p2_2:", t_p1p2_2)
@@ -79,12 +78,24 @@ def NGWN_H_av_t(
             i_s_H_N = i_s_H_N / i
             i_s_H_D = i_s_H_D / i
             i_s_H = i_s_H_N / i_s_H_D
-            print("减速比:", i_s_H_N, "/", i_s_H_D, "=", i_s_H)
+            # print("减速比:", i_s_H_N, "/", i_s_H_D, "=", i_s_H)
 
     w_h_s = n - n / i_s_H
     w_h_p1 = w_h_s * z_s / z_p1
 
-    return w_h_s, w_h_p1, t, t_p1p2
+    return (
+        w_h_s,
+        w_h_p1,
+        t,
+        t_p1_r1,
+        t_p2_r2,
+    )
 
 
-outputlist = NGWN_H_av_t()
+if __name__ == "__main__":
+    w_h_s, w_h_p1, t, t_p1_r1, t_p2_r2 = NGWN_H_av_t()
+    print("w_h_s:", w_h_s)
+    print("w_h_p1:", w_h_p1)
+    print("t:", t)
+    print("t_p1_r1:", t_p1_r1)
+    print("t_p2_r2:", t_p2_r2)

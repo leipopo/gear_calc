@@ -72,8 +72,8 @@ for zs in range(min_zs, max_zs + 1):
                             i_s_H,
                             eta,
                             ns_H,
-                            np_H,
                             ts / n_p,
+                            np_H,
                             tp,
                             tp * t_input_peaks_ratio,
                         ]
@@ -91,8 +91,8 @@ table.field_names = [
     "i_s_H",
     "eta",
     "ns_H",
-    "np_H",
     "ts",
+    "np_H",
     "tp",
     "tp_peak",
 ]
@@ -113,8 +113,8 @@ table_sorted.field_names = [
     "i_s_H",
     "eta",
     "ns_H",
-    "np_H",
     "ts",
+    "np_H",
     "tp",
     "tp_peak",
 ]

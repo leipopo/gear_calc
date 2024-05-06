@@ -47,9 +47,9 @@ def NW_H_av_t(
     # print("F_s_p1:", F_s_p1)
     # print("F_r_p2:", F_r_p2)
     # 计算P1P2转矩
-    t_p1p2 = F_r_p2 * r_p2
+    t_p = F_r_p2 * r_p2
     # print("P1P2转矩:", t_p1p2)
-    t_p1p2 = F_s_p1 * r_p1
+    t_p = F_s_p1 * r_p1
     # print("P1转矩:", t_p1p2)
     # 计算行星架切向力
     F_H_p1p2 = -(F_s_p1 + F_r_p2)
@@ -79,7 +79,12 @@ def NW_H_av_t(
     w_h_s = n - n / i_s_H
     w_h_p = w_h_s / z_p1 * z_s
 
-    return w_h_s, w_h_p, t, t_p1p2
+    return w_h_s, w_h_p, t, t_p
 
 
-outputlist = NW_H_av_t()
+if __name__ == "__main__":
+    w_h_s, w_h_p, t, t_p1p2 = NW_H_av_t()
+    print("w_h_s:", w_h_s)
+    print("w_h_p:", w_h_p)
+    print("t:", t)
+    print("t_p1p2:", t_p1p2)

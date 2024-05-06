@@ -64,7 +64,7 @@ for zs in range(min_zs, max_zs + 1):
                 eta_forward, eta_backward = NGWN_E_OPT(
                     zs=zs, zp1=zp1, zp2=zp2, zr1=zr1, zr2=zr2
                 )
-                ns_H, np_H, ts, tp = NGWN_H_av_t(
+                ns_H, np_H, ts, tp1, tp2 = NGWN_H_av_t(
                     m_1=m1,
                     m_2=m2,
                     z_s=zs,
@@ -97,8 +97,10 @@ for zs in range(min_zs, max_zs + 1):
                                 eta_backward,
                                 ts / n_p,
                                 ns_H,
-                                tp,
+                                tp1,
+                                tp2,
                                 np_H,
+                                tp2 * t_input_peaks_ratio,
                             ]
                         ]
                         results.append(formatted_result)
@@ -117,8 +119,10 @@ pt.field_names = [
     "逆向效率",
     "S转矩",
     "S的H转速",
-    "P转矩",
+    "P1转矩",
+    "P2转矩",
     "P的H转速",
+    "P上的峰值转矩",
 ]
 for result in results:
     pt.add_row(result)  # 将元组转换为列表，以便prettytable处理
@@ -142,8 +146,10 @@ pt_sorted.field_names = [
     "逆向效率",
     "S转矩",
     "S的H转速",
-    "P转矩",
+    "P1转矩",
+    "P2转矩",
     "P的H转速",
+    "P上的峰值转矩",
 ]
 for result in sorted_results:
     pt_sorted.add_row(result)
