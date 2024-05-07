@@ -65,17 +65,17 @@ def NGWN_E_OPT(
     # 总啮合损失系数
     psai_m_x_23 = (psai_m_x_2_2 + psai_m_x_3_2) * N_p
 
-    print("齿数", zs, zp1, zp2, zr1, zr2)
-    # print("一级s_p1啮合损失系数", psai_m_x_1)
-    # print("一级s_p1啮合损失系数2", psai_m_x_1_2)
-    # print("一级p1_r1啮合损失系数", psai_m_x_2)
-    print("一级p1_r1啮合损失系数2", psai_m_x_2_2)
-    # print("一级p1_r1啮合损失系数", psai_m_x_3)
-    print("二级p2_r2啮合损失系数2", psai_m_x_3_2)
-    print("总啮合损失系数", psai_m_x_23)
+    # print("齿数", zs, zp1, zp2, zr1, zr2)
+    # # print("一级s_p1啮合损失系数", psai_m_x_1)
+    # # print("一级s_p1啮合损失系数2", psai_m_x_1_2)
+    # # print("一级p1_r1啮合损失系数", psai_m_x_2)
+    # print("一级p1_r1啮合损失系数2", psai_m_x_2_2)
+    # # print("一级p1_r1啮合损失系数", psai_m_x_3)
+    # print("二级p2_r2啮合损失系数2", psai_m_x_3_2)
+    # print("总啮合损失系数", psai_m_x_23)
     # 效率
     i_s_r2 = (1 + zr1 / zs) / (1 - (zp2 * zr1) / (zp1 * zr2))
-    print("i_s_r2", i_s_r2)
+    # print("i_s_r2", i_s_r2)
     p = zr1 / zs
     # print("p", p)
     if zr1 >= zr2:
@@ -84,8 +84,8 @@ def NGWN_E_OPT(
     else:
         eta_forward = 0.98 / (1 + abs(i_s_r2 / (1 + p)) * psai_m_x_23)  # zr2>zr1
         eta_backward = 0.98 * (1 - abs(i_s_r2 / (1 + p) + 1) * psai_m_x_23)  # zr2>zr1
-    print("正向驱动效率", eta_forward)
-    print("反向驱动效率", eta_backward)
+    # print("正向驱动效率", eta_forward)
+    # print("反向驱动效率", eta_backward)
 
     return [eta_forward, eta_backward]
 

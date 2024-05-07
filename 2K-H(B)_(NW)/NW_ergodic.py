@@ -38,7 +38,7 @@ for zs in range(min_zs, max_zs + 1):
         for zp2 in range(min_zp2, zp1):
             for zr in range(
                 int((zs * m1 + zp1 * m1 + zp2 * m2) / m2),
-                int((zs * m1 + zp1 * m1 + zp2 * m2) / m2) + 4,
+                int((zs * m1 + zp1 * m1 + zp2 * m2) / m2) + n_p + 1,
             ):
                 # 判断是否均布
                 if not NW_UD_JUDGEMENT(zs=zs, zp1=zp1, zp2=zp2, zr=zr, n_p=n_p):

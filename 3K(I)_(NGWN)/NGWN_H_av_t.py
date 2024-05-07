@@ -25,7 +25,7 @@ def NGWN_H_av_t(
     t=0.005,
     n=10000,
 ):
-
+    i_s_H = (1 + z_r1 / z_s) / (1 - (z_p2 * z_r1) / (z_p1 * z_r2))
     # 计算S和P1的理论啮合半径
     r_s = m_1 * z_s / 2 if d_s == None else d_s / 2
     # 计算P1的理论啮合半径
@@ -53,7 +53,13 @@ def NGWN_H_av_t(
     F_s_p1 = -F_p1_s
     # print("F_s_p1",F_s_p1)
     # 计算R1切向力
-    F_r1_p1 = (r_p1 + r_p2) / (r_p1 - r_p2) * F_s_p1
+    print("r_p1:", m_1, "*", z_p1, "/", 2, "=", r_p1)
+    print("r_p2:", m_2, "*", z_p2, "/", 2, "=", r_p2)
+    if r_p1 == r_p2:
+        return (0, 0, 0, 0, 0)
+    else:
+        # F_r1_p1 = t * i_s_H / r_r2 / 3
+        F_r1_p1 = (r_p1 + r_p2) / (r_p1 - r_p2) * F_s_p1
     F_p1_r1 = -F_r1_p1
     # 计算P1输入到R1的转矩
     t_p1_r1 = F_r1_p1 * r_p1
