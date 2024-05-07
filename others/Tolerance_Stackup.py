@@ -18,6 +18,10 @@ class Part:
 
 
 def calculate_closed_loop_tolerance(parts):
+    # print(sum(part.size for part in parts if part.is_increase==True))
+    # print(sum(part.size for part in parts if part.is_increase==False))
+    close_loop_base_length =(sum(part.size for part in parts if part.is_increase==True)-sum(part.size for part in parts if part.is_increase==False)).__round__(3)
+    # print(close_loop_base_length)
     total_upper_deviation = sum(
         part.upper_deviation if part.is_increase else -part.lower_deviation
         for part in parts
@@ -27,59 +31,59 @@ def calculate_closed_loop_tolerance(parts):
         for part in parts
     ).__round__(3)
     closed_loop_tolerance = round(total_upper_deviation - total_lower_deviation, 3)
-    return closed_loop_tolerance, total_upper_deviation, total_lower_deviation
+    return close_loop_base_length, closed_loop_tolerance, total_upper_deviation, total_lower_deviation
 
 
 def visualize_closed_loop_tolerance(parts, img_width=16, img_height=10, m=20):
     increase_parts = [part for part in parts if part.is_increase]
     decrease_parts = [part for part in parts if not part.is_increase]
 
-    closed_loop_deviation, total_upper_deviation, total_lower_deviation = (
+    close_loop_base_length,closed_loop_deviation, total_upper_deviation, total_lower_deviation = (
         calculate_closed_loop_tolerance(parts)
     )
 
     increase_parts_total_length = sum(
         part.size + part.lower_deviation for part in increase_parts
     )
-    # print(increase_parts_total_length)
+    print(increase_parts_total_length)
     decrease_parts_total_length = sum(
         part.size + part.upper_deviation for part in decrease_parts
     )
-    # print(decrease_parts_total_length)
+    print(decrease_parts_total_length)
     drawing_width_percentage = 0.9  # 绘制宽度百分比
-    if increase_parts_total_length >= decrease_parts_total_length:
-        base_length = sum(part.size + part.upper_deviation for part in increase_parts)
+    if (increase_parts_total_length >= decrease_parts_total_length):
+        size_base_length = sum(part.size + part.upper_deviation for part in increase_parts)
         closed_loop_line_place = "upper"
 
         increase_parts_length_percentage = list(
-            (part.size + part.upper_deviation) / base_length * drawing_width_percentage
+            (part.size + part.upper_deviation) / size_base_length * drawing_width_percentage
             for part in increase_parts
         )
         decrease_parts_length_percentage = list(
             (part.size + part.lower_deviation)
-            / base_length
-            * (base_length - total_upper_deviation * m)
-            / base_length
+            / size_base_length
+            * (size_base_length - total_upper_deviation * m)
+            / size_base_length
             * drawing_width_percentage
             for part in decrease_parts
         )
     else:
-        base_length = sum(part.size + part.lower_deviation for part in decrease_parts)
+        size_base_length = sum(part.size + part.upper_deviation for part in decrease_parts)
         closed_loop_line_place = "lower"
         increase_parts_length_percentage = list(
-            (part.size + part.upper_deviation)
-            / base_length
-            * (base_length - total_lower_deviation * m)
-            / base_length
+            (part.size + part.lower_deviation)
+            / size_base_length
+            * (size_base_length - total_upper_deviation * m)
+            / size_base_length
             * drawing_width_percentage
             for part in increase_parts
         )
         decrease_parts_length_percentage = list(
-            (part.size + part.lower_deviation) / base_length * drawing_width_percentage
+            (part.size + part.upper_deviation) / size_base_length * drawing_width_percentage
             for part in decrease_parts
         )
 
-    closed_loop_color = "green" if total_lower_deviation >= 0 else "orange"
+    closed_loop_color = "green" if (close_loop_base_length+total_lower_deviation) >= 0 else "orange"
     # if increase_parts_total_length > decrease_parts_total_length:
     #     base_length = increase_parts_total_length
     #     closed_loop_color = "green"
@@ -185,7 +189,7 @@ def visualize_closed_loop_tolerance(parts, img_width=16, img_height=10, m=20):
         color=closed_loop_color,
         linewidth=partline_width,
     )
-    text = f"Closed Loop Tolerance: {closed_loop_deviation}\nTotal Upper Deviation: {total_upper_deviation}\nTotal Lower Deviation: {total_lower_deviation}"
+    text = f"base_length:{close_loop_base_length}\nClosed Loop Tolerance: {closed_loop_deviation}\nTotal Upper Deviation: {total_upper_deviation}\nTotal Lower Deviation: {total_lower_deviation}"
     plt.text(
         current_percentage
         + (start_x + drawing_width_percentage - current_percentage) / 2,

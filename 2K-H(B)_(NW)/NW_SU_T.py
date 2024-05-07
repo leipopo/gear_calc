@@ -31,26 +31,38 @@ TS.visualize_closed_loop_tolerance(parts)
 # NW_8513V0.1
 
 ## 外壳与行星架下部轴承配合位高度公差叠加
-# part_housing = TS.Part("housing", 20.7, 0.02, 0.0, True)
-# part_upper_planetary = TS.Part("upper_planetary", 6.7, 0.0, -0.05, False)
+# part_housing = TS.Part("housing", 20.7, 0.04, 0.0, True)
+# part_upper_planetary = TS.Part("upper_planetary", 6.7, 0.00, -0.06, False)
 # part_lower_planetary = TS.Part("lower_planetary", 10, 0.0, -0.05, False)
-# part_bearing = TS.Part("bearing", 4, -0.03, -0.10, False)
+# part_bearing=TS.Part("bearing",4,-0.0,-0.04,False)
 # parts = [part_housing, part_upper_planetary, part_lower_planetary, part_bearing]
 # TS.visualize_closed_loop_tolerance(parts)
 
 ## 齿圈与一级行星轮配合位公差叠加
-part_housing = TS.Part("housing", 7.9, 0.05, 0.0, True)
-part_housing_ring = TS.Part("housing_ring", 6, 0.02, -0.02, True)
-part_ring = TS.Part("ring", 6, 0.02, -0.02, False)
-part_upper_planetary = TS.Part("upper_planetary", 6.7, 0.0, -0.05, False)
-part_lower_planetary = TS.Part("lower_planetary", 8, 0.0, -0.05, False)
-part_p2 = TS.Part("p2", 6.9, 0.1, 0, True)
-parts = [
-    part_housing,
-    part_housing_ring,
-    part_ring,
-    part_upper_planetary,
-    part_lower_planetary,
-    part_p2,
-]
+# part_housing_1 = TS.Part("housing", 7.9, 0.04, 0.00, True)
+# part_housing_ring = TS.Part("housing_ring", 6, 0.04, 0.0, True)
+# part_ring = TS.Part("ring", 6, 0.0, -0.04, False)
+# part_upper_planetary = TS.Part("upper_planetary", 6.7, 0.00, -0.06, False)
+# part_lower_planetary_1 = TS.Part("lower_planetary", 8, 0.0, -0.02, False)
+# part_p2 = TS.Part("p2", 6.9, 0.04, 0, True)
+# parts = [
+#     part_housing,
+#     part_housing_ring,
+#     part_ring,
+#     part_upper_planetary,
+#     part_lower_planetary,
+#     part_p2,
+# ]
+# TS.visualize_closed_loop_tolerance(parts)
+
+## 太阳齿与行星架顶部配合轴承
+part_stator = TS.Part("stator", 13/2, 0.2/2, -0.2/2, False)
+part_housing_2=TS.Part("housing",10.3,0.03,-0.03,False)
+part_upper_planetary_1=TS.Part("upper_planetary",3,0.04,0.0,False)
+part_bearing_1=TS.Part("bearing",4,-0.0,-0.04,True)
+part_sgear = TS.Part("sgear",18.8,0.03,0.0,True)
+part_sgear_bracket=TS.Part("sgear_bracket",3.5,0.04,0.0,True)
+part_rotator=TS.Part("rotator",13/2,0.05/2,-0.05/2,False)
+
+parts=[part_stator,part_housing_2,part_upper_planetary_1,part_bearing_1,part_sgear,part_sgear_bracket,part_rotator]
 TS.visualize_closed_loop_tolerance(parts)
