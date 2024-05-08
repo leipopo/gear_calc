@@ -52,20 +52,25 @@ def NGWN_H_av_t(
     # 计算S输入到P1的切向力
     F_s_p1 = -F_p1_s
     # print("F_s_p1",F_s_p1)
-    
-    
+
     # 计算P2切向力
-    t_out = (1 + z_r1 / z_s) / (1 - (z_p2 * z_r1) / (z_p1 * z_r2))*t
-    F_p2_r2 = t_out / r_r2/N_p
+    t_out = (1 + z_r1 / z_s) / (1 - (z_p2 * z_r1) / (z_p1 * z_r2)) * t
+    F_p2_r2 = t_out / r_r2 / N_p
     # 计算R1切向力
     # F_r1_p1 = (r_p1 + r_p2) / (r_p1 - r_p2) * F_s_p1
     # F_p1_r1 = -F_r1_p1
     F_r2_p2 = -F_p2_r2
-    F_r1_p1 = F_r2_p2-F_s_p1
+    if r_p1 > r_p2:
+        F_r1_p1 = F_r2_p2 - F_s_p1
+    elif r_p1 < r_p2:
+        F_r1_p1 = F_r2_p2 + F_s_p1
+    else:
+        F_r1_p1 = F_r2_p2
+
     F_p1_r1 = -F_r1_p1
     # 计算P1输入到R1的转矩
     t_p1_r1 = F_r1_p1 * r_p1
-    
+
     # 计算P2输入到R2的转矩
     t_p2_r2 = F_r2_p2 * r_p2
     # t_p1p2_2 = F_s_p1 * r_p1 - F_r1_p1 * r_p1
@@ -89,11 +94,11 @@ def NGWN_H_av_t(
 
     w_h_s = n - n / i_s_H
     w_h_p1 = w_h_s * z_s / z_p1
-    
+
     # print ((1 + z_r1 / z_s) / (1 - (z_p2 * z_r1) / (z_p1 * z_r2)))
-    
+
     # print ("t_out:",t_out)
-    
+
     # print("t_p2_r2_1:", t_p2_r2_1)
     return (
         w_h_s,

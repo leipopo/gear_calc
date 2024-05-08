@@ -7,6 +7,15 @@ from NW_H_av_t import NW_H_av_t
 import csv
 import math
 
+import sys
+from pathlib import Path
+
+current_file = Path(__file__)
+package_path = current_file.parent.parent
+sys.path.append(str(package_path))
+
+from NGW_2K_H_A import P_col_dec as gp
+
 "基本参数与遍历范围设置"
 n_p = 3  # 行星轮数量
 m1 = 0.55  # 一级模数
@@ -40,6 +49,9 @@ for zs in range(min_zs, max_zs + 1):
                 int((zs * m1 + zp1 * m1 + zp2 * m2) / m2),
                 int((zs * m1 + zp1 * m1 + zp2 * m2) / m2) + n_p + 1,
             ):
+                # 判断一级行星是否撞击
+                if gp.detector_col_dec(m1, n_p, zs, zp1, 0) == False:
+                    continue
                 # 判断是否均布
                 if not NW_UD_JUDGEMENT(zs=zs, zp1=zp1, zp2=zp2, zr=zr, n_p=n_p):
                     continue
@@ -126,9 +138,7 @@ print("\n效率降序表格：")
 print(table_sorted)
 
 """将结果写入csv文件"""
-with open(
-    "2K-H(B)_(NW)/NW_output/NW_efficiency_optimization.csv", "w", newline=""
-) as f:
+with open("NW_2K_H_B/NW_output/NW_efficiency_optimization.csv", "w", newline="") as f:
     writer = csv.writer(f)
     writer.writerow(
         [

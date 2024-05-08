@@ -6,6 +6,15 @@ from NGWN_H_av_t import NGWN_H_av_t
 import math
 import csv
 
+import sys
+from pathlib import Path
+
+current_file = Path(__file__)
+package_path = current_file.parent.parent
+sys.path.append(str(package_path))
+
+from NGW_2K_H_A import P_col_dec as gp
+
 """
 符号定义
 -----------
@@ -21,7 +30,7 @@ import csv
 
 "基本参数与遍历范围设置"
 
-n_p = 5  # 行星轮数量
+n_p = 4  # 行星轮数量
 m1 = 0.6  # 一级模数
 m2 = 0.6  # 二级模数
 
@@ -36,7 +45,7 @@ max_i = 30  # 速比上限
 h_r_D = 2  # 齿根到齿外圆的距离
 max_dr1 = 53  # 一级齿圈外径圆直径上限
 max_zr1 = int((max_dr1 - h_r_D * 2 - m1 * 1.25 * 2) / m1)  # 一级齿圈最大齿数
-max_dr2 = 53  # 二级齿圈外径圆直径上限
+max_dr2 = 60  # 二级齿圈外径圆直径上限
 max_zr2 = int((max_dr2 - h_r_D * 2 - m2 * 1.25 * 2) / m2)  # 二级齿圈最大齿数
 min_eta = 0.90  # 最小效率（确保效率不会太低）
 
@@ -48,18 +57,17 @@ results = []  # 初始化结果表格
 
 """遍历开始"""
 for zs in range(min_zs, max_zs + 1):
-    for zp1 in range(min_zp1, int(zs * 6.464) + 1):  # 行星轮干涉条件
-        for zr1 in range(zs + 2 * zp1, zs + 2 * zp1 + n_p + 1):
-            if zp1 < min_zp1:
-                continue
+    zp1 = min_zp1
+    while gp.detector_col_dec(m1, n_p, zs, zp1, 0) == True:
+        for zr1 in range(zs + 2 * zp1, min(max_zr1, zs + 2 * zp1) + 1):
             if (zs + zr1) % n_p == 0:
-                for zr2 in range(
-                    int((min_zs + min_zp1) * m1 / m2 + min_zp2), max_zr2 + 1
-                ):
-                    if (zr1 > max_zr1) or (zr2 > max_zr2):  # 限定齿圈最大齿数
-                        continue
+                for zr2 in range(int((zs + zp1) * m1 / m2 + min_zp2), max_zr2 + 1):
                     zp2 = int(zr2 - m1 / m2 * (zs + zp1))
+                    if m2 * (zr2 - zp2) > m1 * (zr1 - zp1):
+                        continue
                     if zp2 < min_zp2:
+                        continue
+                    if (gp.detector_col_dec(m2, n_p, 0, zp2, zr2)) == False:
                         continue
                     if (zp2 * zr1) / (zp1 * zr2) == 1:  # 判定减速比不能无穷大
                         continue
@@ -79,7 +87,19 @@ for zs in range(min_zs, max_zs + 1):
                         t=t_input,
                         n=n_input,
                     )
+
                     i = (1 + zr1 / zs) / (1 - (zp2 * zr1) / (zp1 * zr2))
+                    i_s_r2_N = (zs + zr1) * (zp1 * zr2)
+                    i_s_r2_D = zs * (zp1 * zr2 - zp2 * zr1)
+                    # 最简分式
+                    k = 0
+                    while k < 3:
+                        for j in range(1, 100):
+                            if i_s_r2_N % j == 0 and i_s_r2_D % j == 0:
+                                i_s_r2_N = i_s_r2_N / j
+                                i_s_r2_D = i_s_r2_D / j
+                        k += 1
+
                     # print(zs, zp1, zp2, zr1, zr2)
                     # print(i)
                     # print(eta_forward)
@@ -106,8 +126,11 @@ for zs in range(min_zs, max_zs + 1):
                                     tp2 * t_input_peaks_ratio,
                                 ]
                             ]
+                            formatted_result[5] = "{}/{}={}".format(
+                                int(i_s_r2_N), int(i_s_r2_D), i.__round__(4)
+                            )
                             results.append(formatted_result)
-
+        zp1 += 1
 """使用prettytable打印结果"""
 
 pt = PrettyTable()
@@ -162,7 +185,7 @@ print(pt_sorted)
 
 # 准备保存CSV文件
 with open(
-    "3K(I)_(NGWN)/NGWN_output/NGWN_efficiency_optimization.csv", "w", newline=""
+    "NGWN_3K_I/NGWN_output/NGWN_efficiency_optimization.csv", "w", newline=""
 ) as csvfile:
     writer = csv.writer(csvfile)
     # 写入标题行
