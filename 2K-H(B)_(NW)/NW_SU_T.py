@@ -55,14 +55,29 @@ TS.visualize_closed_loop_tolerance(parts)
 # ]
 # TS.visualize_closed_loop_tolerance(parts)
 
-## 太阳齿与行星架顶部配合轴承
-part_stator = TS.Part("stator", 13/2, 0.2/2, -0.2/2, False)
-part_housing_2=TS.Part("housing",10.3,0.03,-0.03,False)
-part_upper_planetary_1=TS.Part("upper_planetary",3,0.04,0.0,False)
-part_bearing_1=TS.Part("bearing",4,-0.0,-0.04,True)
-part_sgear = TS.Part("sgear",18.8,0.03,0.0,True)
-part_sgear_bracket=TS.Part("sgear_bracket",3.5,0.04,0.0,True)
-part_rotator=TS.Part("rotator",13/2,0.05/2,-0.05/2,False)
+## 转子与定子配合
+# part_stator = TS.Part("stator", 13/2, 0.2/2, -0.2/2, False)
+# part_housing_2=TS.Part("housing",10.3,0.03,-0.03,False)
+# part_upper_planetary_1=TS.Part("upper_planetary",3,0.04,0.0,False)
+# part_bearing_1=TS.Part("bearing",4,-0.0,-0.04,True)
+# part_sgear = TS.Part("sgear",18.8,0.03,0.0,True)
+# part_sgear_bracket=TS.Part("sgear_bracket",3.5,0.04,0.0,True)
+# part_rotator=TS.Part("rotator",13/2,0.05/2,-0.05/2,False)
 
-parts=[part_stator,part_housing_2,part_upper_planetary_1,part_bearing_1,part_sgear,part_sgear_bracket,part_rotator]
+# parts=[part_stator,part_housing_2,part_upper_planetary_1,part_bearing_1,part_sgear,part_sgear_bracket,part_rotator]
+# TS.visualize_closed_loop_tolerance(parts)
+
+## 码盘
+part_housing_3 = TS.Part("housing",36.65,0.03,-0.03,True)
+part_upper_planetary_1=TS.Part("upper_planetary",3,0.04,0.0,True)
+part_cover=TS.Part("cover",2.45,0.05,0,False)
+part_drive_pcb=TS.Part("drive_pcb",1.6,0.16,-0.16,False)
+part_encoder_pcb=TS.Part("drive_pcb",1.6,0.16,-0.16,False)
+part_RF_pcb=TS.Part("drive_pcb",1.6,0.16,-0.16,False)
+part_pad_pcb=TS.Part("drive_pcb",1.6,0.16,-0.16,False)
+part_bearing_1=TS.Part("bearing",4,-0.0,-0.04,False)
+part_sgear = TS.Part("sgear",18.8,0.03,0.0,False)
+part_sgear_bracket=TS.Part("sgear_bracket",4,0.06,0.0,False)
+part_column_PCB=TS.Part("column_PCB",3,0.005,-0.005,False)
+parts = [part_housing_3,part_upper_planetary_1,part_cover,part_drive_pcb,part_encoder_pcb,part_RF_pcb,part_pad_pcb,part_bearing_1,part_sgear,part_sgear_bracket,part_column_PCB]
 TS.visualize_closed_loop_tolerance(parts)

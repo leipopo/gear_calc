@@ -25,7 +25,7 @@ def NGWN_H_av_t(
     t=0.005,
     n=10000,
 ):
-    i_s_H = (1 + z_r1 / z_s) / (1 - (z_p2 * z_r1) / (z_p1 * z_r2))
+
     # 计算S和P1的理论啮合半径
     r_s = m_1 * z_s / 2 if d_s == None else d_s / 2
     # 计算P1的理论啮合半径
@@ -37,44 +37,45 @@ def NGWN_H_av_t(
     # 计算R2的理论啮合半径
     r_r2 = m_2 * z_r2 / 2 if d_r2 == None else d_r2 / 2
     # 计算双联行星中心距
-    r_p1_p2 = (
-        (
-            (m_1 * z_p1 + m_1 * z_s) / 2
-            + (m_2 * z_r2 - m_2 * z_p2) / 2
-            + (m_1 * z_r1 - m_1 * z_p1) / 2
-        )
-        / 3
-        if d_s == None or d_r1 == None or d_r2 == None or d_p1 == None or d_p2 == None
-        else ((d_s + d_p1) / 2 + (d_r1 - d_p1) / 2 + (d_r2 - d_p2) / 2) / 3
-    )
+    # r_p1_p2 = (
+    #     (
+    #         (m_1 * z_p1 + m_1 * z_s) / 2
+    #         + (m_2 * z_r2 - m_2 * z_p2) / 2
+    #         + (m_1 * z_r1 - m_1 * z_p1) / 2
+    #     )
+    #     / 3
+    #     if d_s == None or d_r1 == None or d_r2 == None or d_p1 == None or d_p2 == None
+    #     else ((d_s + d_p1) / 2 + (d_r1 - d_p1) / 2 + (d_r2 - d_p2) / 2) / 3
+    # )
     # 计算S切向力
     F_p1_s = t / N_p / r_s
     # 计算S输入到P1的切向力
     F_s_p1 = -F_p1_s
     # print("F_s_p1",F_s_p1)
+    
+    
+    # 计算P2切向力
+    t_out = (1 + z_r1 / z_s) / (1 - (z_p2 * z_r1) / (z_p1 * z_r2))*t
+    F_p2_r2 = t_out / r_r2/N_p
     # 计算R1切向力
-    print("r_p1:", m_1, "*", z_p1, "/", 2, "=", r_p1)
-    print("r_p2:", m_2, "*", z_p2, "/", 2, "=", r_p2)
-    if r_p1 == r_p2:
-        return (0, 0, 0, 0, 0)
-    else:
-        # F_r1_p1 = t * i_s_H / r_r2 / 3
-        F_r1_p1 = (r_p1 + r_p2) / (r_p1 - r_p2) * F_s_p1
+    # F_r1_p1 = (r_p1 + r_p2) / (r_p1 - r_p2) * F_s_p1
+    # F_p1_r1 = -F_r1_p1
+    F_r2_p2 = -F_p2_r2
+    F_r1_p1 = F_r2_p2-F_s_p1
     F_p1_r1 = -F_r1_p1
     # 计算P1输入到R1的转矩
     t_p1_r1 = F_r1_p1 * r_p1
-    # 计算P2切向力
-    F_r2_p2 = F_r1_p1 + F_s_p1
-    F_p2_r2 = -F_r2_p2
+    
     # 计算P2输入到R2的转矩
     t_p2_r2 = F_r2_p2 * r_p2
     # t_p1p2_2 = F_s_p1 * r_p1 - F_r1_p1 * r_p1
     # print("t_p1p2:", t_p1p2)
     # print("t_p1p2_2:", t_p1p2_2)
-    # 计算R1转矩
-    t_r1 = F_p1_r1 * N_p * r_r1
-    # 计算R2转矩
-    t_r2 = -F_p2_r2 * N_p * r_r2
+    # # 计算R1转矩
+    # t_r1 = F_p1_r1 * N_p * r_r1
+    # # 计算R2转矩
+    # t_r2 = -F_p2_r2 * N_p * r_r2
+    # print(t_r2)
 
     i_s_H_N = z_s + z_r1
     i_s_H_D = z_s
@@ -88,7 +89,12 @@ def NGWN_H_av_t(
 
     w_h_s = n - n / i_s_H
     w_h_p1 = w_h_s * z_s / z_p1
-
+    
+    # print ((1 + z_r1 / z_s) / (1 - (z_p2 * z_r1) / (z_p1 * z_r2)))
+    
+    # print ("t_out:",t_out)
+    
+    # print("t_p2_r2_1:", t_p2_r2_1)
     return (
         w_h_s,
         w_h_p1,
