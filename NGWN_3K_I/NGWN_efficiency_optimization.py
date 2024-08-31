@@ -9,15 +9,15 @@ import math
 
 def NGWN_E_OPT(
     epsilon1=1,
-    epsilon2=1,
-    epsilon3=1,
+    epsilon2=1.8,
+    epsilon3=1.8,
     f_m=0.06,
     N_p=3,
-    zs=9,
-    zp1=12,
-    zp2=13,
-    zr1=33,
-    zr2=34,
+    zs=11,
+    zp1=30,
+    zp2=19,
+    zr1=73,
+    zr2=61,
 ):
     """
     计算3K(I)型行星减速器的效率
@@ -75,7 +75,7 @@ def NGWN_E_OPT(
     # print("总啮合损失系数", psai_m_x_23)
     # 效率
     i_s_r2 = (1 + zr1 / zs) / (1 - (zp2 * zr1) / (zp1 * zr2))
-    # print("i_s_r2", i_s_r2)
+    print("i_s_r2", i_s_r2)
     p = zr1 / zs
     # print("p", p)
     if zr1 >= zr2:
@@ -95,4 +95,4 @@ def NGWN_E_OPT(
 # Z_P1 = 45
 # Z_P2 = 15
 # Z_R = 63
-# print(NW_E_OPT())
+print(NGWN_E_OPT())
