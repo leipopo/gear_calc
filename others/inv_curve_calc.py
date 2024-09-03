@@ -24,6 +24,30 @@ def export_to_dxf(points, filename="involute_curve.dxf",linetype="CONTINUOUS", d
     """将坐标点导出为DXF文件"""
     doc = ezdxf.new(dxfversion='R2010')
     msp = doc.modelspace()
+    # 设置单位
+    units_dict = {
+        "Inches": 1,
+        "Feet": 2,
+        "Miles": 3,
+        "Millimeters": 4,
+        "Centimeters": 5,
+        "Meters": 6,
+        "Kilometers": 7,
+        "Microinches": 8,
+        "Mils": 9,
+        "Yards": 10,
+        "Angstroms": 11,
+        "Nanometers": 12,
+        "Microns": 13,
+        "Decimeters": 14,
+        "Decameters": 15,
+        "Hectometers": 16,
+        "Gigameters": 17,
+        "Astronomical units": 18,
+        "Light years": 19,
+        "Parsecs": 20
+    }
+    doc.header['$INSUNITS'] = units_dict.get(units, 4)  # 默认为毫米
     # 确保线型在DXF文档中定义
     if linetype not in doc.linetypes:
         doc.linetypes.new(linetype, dxfattribs={'description': 'Custom linetype', 'pattern': [0.2, 0.2]})
